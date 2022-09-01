@@ -1,1 +1,1 @@
-(8.) Write a script that adds execution permission to the owner, the group owner and the other users, to the file hello
+(9.) Write a script that sets permission to the file hello
