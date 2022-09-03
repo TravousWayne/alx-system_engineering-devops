@@ -1,1 +1,1 @@
-move the file betty from /tmp/ to /tmp/my_first_directory
+Write a command that lists all the files and directories of the current directory, separated by commas
