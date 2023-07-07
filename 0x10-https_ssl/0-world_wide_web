@@ -1,21 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Takes a subdomain and a domain and returns information about the subdomain
 
-get_record_info() {
-  domain=$1
-  subdomain=$2
-
-  if [ -z "$subdomain" ]; then
-    subdomains=("www" "lb-01" "web-01" "web-02")
-  else
-    subdomains=("$subdomain")
-  fi
-
-  for sub in "${subdomains[@]}"; do
-    record_type=$(dig "$sub.$domain" | awk '/ANSWER SECTION:/ {getline; print $4}')
-    destination=$(dig "$sub.$domain" | awk '/ANSWER SECTION:/ {getline; getline; print $5}')
-
-    echo "The subdomain $sub is a $record_type record and points to $destination"
-  done
+print_info () {
+    dig "$1" | grep -A1 'ANSWER SECTION:' | sed -r "s/$1./$2/g" | awk -F" " ' NR==2 { print "The subdomain " $1 " is a " $4 " record and points to " $5 }'
 }
 
-get_record_info "$1" "$2"
+if [ "$#" -eq 2 ]
+then
+    print_info "$2.$1" "$2"
+else
+    print_info "www.$1" "www"
+    print_info "lb-01.$1" "lb-01"
+    print_info "web-01.$1" "web-01"
+    print_info "web-02.$1" "web-02"
+fi
